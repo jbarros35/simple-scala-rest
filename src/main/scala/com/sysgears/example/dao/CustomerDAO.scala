@@ -14,8 +14,8 @@ import slick.jdbc.meta.MTable
 class CustomerDAO extends Configuration {
 
   // init Database instance
-  private val db = Database.forURL(url = "jdbc:mysql://%s:%d/%s".format(dbHost, dbPort, dbName),
-    user = dbUser, password = dbPassword, driver = "com.mysql.jdbc.Driver")
+  private val db = Database.forURL(url = "jdbc:h2:mem:demo",
+    user = dbUser, password = dbPassword, driver = "org.h2.Driver")
 
   // create tables if not exist
   db.withSession {
