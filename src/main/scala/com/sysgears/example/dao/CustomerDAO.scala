@@ -4,8 +4,8 @@ import com.sysgears.example.config.Configuration
 import com.sysgears.example.domain._
 import java.sql._
 import scala.Some
-import scala.slick.driver.MySQLDriver.simple.Database.threadLocalSession
-import scala.slick.driver.MySQLDriver.simple._
+import scala.slick.driver.H2Driver.simple.Database.threadLocalSession
+import scala.slick.driver.H2Driver.simple._
 import slick.jdbc.meta.MTable
 
 /**
@@ -14,7 +14,7 @@ import slick.jdbc.meta.MTable
 class CustomerDAO extends Configuration {
 
   // init Database instance
-  private val db = Database.forURL(url = "jdbc:h2:mem:demo",
+  lazy val db = Database.forURL(url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
     user = dbUser, password = dbPassword, driver = "org.h2.Driver")
 
   // create tables if not exist

@@ -15,7 +15,8 @@ libraryDependencies ++= Seq(
     "com.h2database" % "h2" % "1.4.195",
     "com.typesafe.akka" %% "akka-actor" % "2.1.4",
     "com.typesafe.akka" %% "akka-slf4j" % "2.1.4",
-    "ch.qos.logback" % "logback-classic" % "1.0.13"
+    "ch.qos.logback" % "logback-classic" % "1.0.13",
+    "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 
 resolvers ++= Seq(

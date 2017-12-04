@@ -1,6 +1,6 @@
 package com.sysgears.example.domain
 
-import scala.slick.driver.MySQLDriver.simple._
+import scala.slick.driver.H2Driver.simple._
 
 /**
  * Customer entity.
