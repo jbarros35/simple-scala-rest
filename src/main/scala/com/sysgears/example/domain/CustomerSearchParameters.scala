@@ -1,6 +1,7 @@
 package com.sysgears.example.domain
 
 import java.util.Date
+import org.joda.time.DateTime
 
 /**
  * Customers search parameters.
@@ -11,4 +12,4 @@ import java.util.Date
  */
 case class CustomerSearchParameters(firstName: Option[String] = None,
                                     lastName: Option[String] = None,
-                                    birthday: Option[Date] = None)
+                                    birthday: Option[org.joda.time.DateTime] = None)

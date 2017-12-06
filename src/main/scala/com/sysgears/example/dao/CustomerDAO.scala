@@ -1,8 +1,9 @@
 package com.sysgears.example.dao
 
 import com.sysgears.example.config.Configuration
-import com.sysgears.example.domain._
+import com.sysgears.example.domain.{Customers, _}
 import java.sql._
+
 import scala.Some
 import scala.slick.driver.H2Driver.simple.Database.threadLocalSession
 import scala.slick.driver.H2Driver.simple._
@@ -126,8 +127,8 @@ class CustomerDAO extends Configuration {
           customer <- Customers if {
           Seq(
             params.firstName.map(customer.firstName is _),
-            params.lastName.map(customer.lastName is _),
-            params.birthday.map(customer.birthday is _)
+            params.lastName.map(customer.lastName is _)
+            //params.birthday.map(customer.birthday is _)
           ).flatten match {
             case Nil => ConstColumn.TRUE
             case seq => seq.reduce(_ && _)
@@ -142,6 +143,31 @@ class CustomerDAO extends Configuration {
         Left(databaseError(e))
     }
   }
+
+  /**
+    * Retrieves list of customers between birthdate.
+    *
+    * @param params search parameters
+    * @return list of customers that match given parameters
+    */
+  def searchByBirthDate(params: SearchBirthdate): Either[Failure, List[Customer]] = {
+    implicit val typeMapper = Customers.dateTypeMapper
+
+    try {
+      db.withSession{
+        val q2 = for {
+          c <- Customers if c.birthday < params.endDate.getOrElse[org.joda.time.DateTime](null) && c.birthday > params.beginDate.getOrElse[org.joda.time.DateTime](null)
+        } yield c
+        val result = q2.run.toList
+        result foreach(println)
+        Right(result)
+      }
+    } catch {
+      case e: SQLException =>
+        Left(databaseError(e))
+    }
+  }
+
 
   /**
    * Produce database error description.

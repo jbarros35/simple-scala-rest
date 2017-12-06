@@ -16,6 +16,9 @@ libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % "2.1.4",
     "com.typesafe.akka" %% "akka-slf4j" % "2.1.4",
     "ch.qos.logback" % "logback-classic" % "1.0.13",
+    //"com.github.nscala-time" %% "nscala-time" % "0.2.0",
+    "joda-time" % "joda-time" % "1.6.2",
+    "org.joda" % "joda-convert" % "1.8",
     "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 

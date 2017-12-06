@@ -1,6 +1,10 @@
 package com.sysgears.example.domain
 
+import java.sql.Timestamp
+
 import scala.slick.driver.H2Driver.simple._
+import java.sql.Date
+import org.joda.time.DateTime
 
 /**
  * Customer entity.
@@ -10,8 +14,8 @@ import scala.slick.driver.H2Driver.simple._
  * @param lastName  last name
  * @param birthday  date of birth
  */
-case class Customer(id: Option[Long], firstName: String, lastName: String, birthday: Option[java.util.Date])
-
+case class Customer(id: Option[Long], firstName: String, lastName: String, birthday: Option[org.joda.time.DateTime])
+case class SearchBirthdate(beginDate: Option[org.joda.time.DateTime], endDate: Option[org.joda.time.DateTime])
 /**
  * Mapped customers table object.
  */
@@ -23,16 +27,23 @@ object Customers extends Table[Customer]("customers") {
 
   def lastName = column[String]("last_name")
 
-  def birthday = column[java.util.Date]("birthday", O.Nullable)
+  def birthday = column[org.joda.time.DateTime]("birthday", O.Nullable)
 
   def * = id.? ~ firstName ~ lastName ~ birthday.? <>(Customer, Customer.unapply _)
 
-  implicit val dateTypeMapper = MappedTypeMapper.base[java.util.Date, java.sql.Date](
+ /* implicit val dateTypeMapper = MappedTypeMapper.base[java.util.Date, java.sql.Timestamp](
   {
-    ud => new java.sql.Date(ud.getTime)
+    dt => new java.sql.Timestamp(dt.getTime)
   }, {
-    sd => new java.util.Date(sd.getTime)
+    t => new java.util.Date(t.getTime)
   })
+*/
+  implicit def dateTypeMapper  =
+    MappedTypeMapper.base[org.joda.time.DateTime, Timestamp](
+      { dateTime => new java.sql.Timestamp(dateTime.getMillis) },
+      { date => new org.joda.time.DateTime(date.getTime) }
+    )
+
 
   val findById = for {
     id <- Parameters[Long]

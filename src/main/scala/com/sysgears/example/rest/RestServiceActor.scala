@@ -13,6 +13,7 @@ import spray.http._
 import spray.httpx.unmarshalling._
 import spray.routing._
 
+
 /**
  * REST Service actor.
  */
@@ -46,10 +47,10 @@ trait RestService extends HttpService with SLF4JLogging {
     }
   }
 
-  implicit val string2Date = new FromStringDeserializer[Date] {
+  implicit val string2Date = new FromStringDeserializer[org.joda.time.DateTime] {
     def apply(value: String) = {
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
-      try Right(sdf.parse(value))
+      try Right(new org.joda.time.DateTime(sdf.parse(value)))
       catch {
         case e: ParseException => {
           Left(MalformedContent("'%s' is not a valid Date value" format (value), e))
@@ -84,7 +85,7 @@ trait RestService extends HttpService with SLF4JLogging {
         }
       } ~
         get {
-          parameters('firstName.as[String] ?, 'lastName.as[String] ?, 'birthday.as[Date] ?).as(CustomerSearchParameters) {
+          parameters('firstName.as[String] ?, 'lastName.as[String] ?, 'birthday.as[org.joda.time.DateTime] ?).as(CustomerSearchParameters) {
             searchParameters: CustomerSearchParameters => {
               ctx: RequestContext =>
                 handleRequest(ctx) {
